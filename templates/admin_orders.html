@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Замовлення</h2>
+  <table class="table">
+    <thead><tr><th>ID</th><th>Клієнт</th><th>Статус</th><th>Сума</th><th></th></tr></thead>
+    <tbody>
+      {% for o in orders %}
+        <tr>
+          <td>{{ o.id }}</td>
+          <td>{{ o.customer_name }} <br><small>{{ o.customer_email }}</small></td>
+          <td>{{ o.status }}</td>
+          <td>{{ "%.2f"|format(o.total) if o.total else '0.00' }}</td>
+          <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.order_detail', oid=o.id) }}">Деталі</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

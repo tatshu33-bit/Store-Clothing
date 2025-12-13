@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Адмін-панель</h2>
+  <p>
+    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.products') }}">Управління товарами</a>
+    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.orders') }}">Замовлення</a>
+  </p>
+
+  <h4>Останні відгуки</h4>
+  {% for f in feedbacks %}
+    <div class="card mb-2">
+      <div class="card-body">
+        <strong>{{ f.name }}</strong> <small class="text-muted">{{ f.created_at }}</small>
+        <p>{{ f.message }}</p>
+        <form method="post" action="{{ url_for('admin.delete_feedback', fid=f.id) }}">
+          <button class="btn btn-danger btn-sm">Видалити</button>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <p>Відгуків немає.</p>
+  {% endfor %}
+{% endblock %}

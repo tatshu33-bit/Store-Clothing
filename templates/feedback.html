@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Зворотній зв'язок</h2>
+  <form method="post" class="mb-4">
+    <div class="mb-3">
+      <label>Ім'я</label>
+      <input name="name" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>Email</label>
+      <input name="email" type="email" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>Повідомлення</label>
+      <textarea name="message" class="form-control" rows="4" required></textarea>
+    </div>
+    <button class="btn btn-primary">Надіслати</button>
+  </form>
+
+  <h3>Відгуки від користувачів</h3>
+  {% for f in feedbacks %}
+    <div class="card mb-2">
+      <div class="card-body">
+        <h6 class="card-title">{{ f.name }} <small class="text-muted">({{ f.email }})</small></h6>
+        <p class="card-text">{{ f.message }}</p>
+        <small class="text-muted">{{ f.created_at }}</small>
+      </div>
+    </div>
+  {% else %}
+    <p>Ще немає відгуків.</p>
+  {% endfor %}
+{% endblock %}

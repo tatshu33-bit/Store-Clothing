@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Кошик</h2>
+  {% if items %}
+    <table class="table">
+      <thead>
+        <tr><th>Товар</th><th>Кількість</th><th>Підсумок</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for it in items %}
+          <tr>
+            <td>{{ it.product.title }}</td>
+            <td>{{ it.qty }}</td>
+            <td>{{ "%.2f"|format(it.subtotal) }} USD</td>
+            <td>
+              <form method="post" action="{{ url_for('shop.cart_remove', pid=it.product.id) }}">
+                <button class="btn btn-sm btn-danger">Видалити</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="fw-bold">Всього: {{ "%.2f"|format(total) }} USD</p>
+    <a class="btn btn-primary" href="{{ url_for('shop.checkout') }}">Оформити замовлення</a>
+  {% else %}
+    <p>Кошик порожній.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Товари</h2>
+  <a class="btn btn-success mb-3" href="{{ url_for('admin.add_product') }}">Додати товар</a>
+  <table class="table">
+    <thead><tr><th>ID</th><th>Назва</th><th>Ціна</th><th></th></tr></thead>
+    <tbody>
+      {% for p in products %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.title }}</td>
+          <td>{{ "%.2f"|format(p.price) }} USD</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.edit_product', pid=p.id) }}">Редагувати</a>
+            <form method="post" action="{{ url_for('admin.delete_product', pid=p.id) }}" style="display:inline">
+              <button class="btn btn-sm btn-danger">Видалити</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
