@@ -6,7 +6,7 @@ import models
 
 app = Flask(__name__)
 app.secret_key = "replace_this_with_a_secure_key"
-app.config['ADMIN_PASSWORD'] = "adminpass"
+app.config['ADMIN_PASSWORD'] = "1"
 
 # ініціалізація БД (створює таблиці при першому запуску)
 models.init_db()
