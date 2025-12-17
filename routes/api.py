@@ -223,6 +223,7 @@ def create_order():
         
         # Calculate total and validate items
         total = 0
+        validated_items = []
         for item in items:
             if 'product_id' not in item or 'quantity' not in item:
                 return jsonify({'error': 'Each item must have product_id and quantity'}), 400
@@ -231,20 +232,27 @@ def create_order():
             if not product:
                 return jsonify({'error': f'Product {item["product_id"]} not found'}), 404
             
-            quantity = int(item['quantity'])
+            try:
+                quantity = int(item['quantity'])
+            except (ValueError, TypeError):
+                return jsonify({'error': 'Quantity must be a valid integer'}), 400
+            
             if quantity <= 0:
                 return jsonify({'error': 'Quantity must be greater than 0'}), 400
             
             total += product['price'] * quantity
+            validated_items.append({
+                'product_id': item['product_id'],
+                'quantity': quantity,
+                'price': product['price']
+            })
         
         # Create order
         order_id = models.create_order(customer_name, customer_email, total)
         
-        # Add order items
-        for item in items:
-            product = models.get_product(item['product_id'])
-            quantity = int(item['quantity'])
-            models.add_order_item(order_id, item['product_id'], quantity, product['price'])
+        # Add order items using validated data
+        for item in validated_items:
+            models.add_order_item(order_id, item['product_id'], item['quantity'], item['price'])
         
         return jsonify({
             'message': 'Order created successfully',
