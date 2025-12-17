@@ -63,7 +63,7 @@ def init_db():
             ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=600&h=400&auto=format&fit=crop"),
             ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=600&h=400&auto=format&fit=crop"),
             ("Штани Slim", "Стильні вузькі штани.", 49.99, "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=600&h=400&auto=format&fit=crop"),
-            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://images.unsplash.com/photo-1572804013307-a9a111984275?q=80&w=600&h=400&auto=format&fit=crop"),
+            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=600&h=400&auto=format&fit=crop"),
             ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=600&h=400&auto=format&fit=crop"),
         ]
         for p in sample_products:
