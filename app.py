@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, url_for, jsonify
+from flask import Flask, session, redirect, url_for, jsonify, render_template
 from routes.admin import admin_bp
 from routes.feedback import feedback_bp
 from routes.shop import shop_bp
@@ -21,7 +21,6 @@ app.register_blueprint(shop_bp)
 
 @app.route('/')
 def index():
-    from flask import render_template
     products = models.get_products(limit=6)
     return render_template('index.html', products=products)
 
@@ -42,4 +41,6 @@ def health():
         }), 503
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Only enable debug mode if FLASK_ENV is set to development
+    debug_mode = os.environ.get('FLASK_ENV', 'production') == 'development'
+    app.run(debug=debug_mode)
