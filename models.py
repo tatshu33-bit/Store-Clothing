@@ -59,12 +59,12 @@ def init_db():
     # insert sample products if empty
     if len(get_products()) == 0:
         sample_products = [
-            ("Футболка Classic", "Бавовняна футболка, різні кольори.", 19.99, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbx-kcVoO4BATmlFjA1UN0crb7Y0JcqXhuPA&s"),
-            ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, "https://picsum.photos/seed/t2/600/400"),
-            ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, "https://picsum.photos/seed/t3/600/400"),
-            ("Штани Slim", "Стильні вузькі штани.", 49.99, "https://picsum.photos/seed/t4/600/400"),
-            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://picsum.photos/seed/t5/600/400"),
-            ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, "https://picsum.photos/seed/t6/600/400"),
+            ("Футболка Classic", "Бавовняна футболка, різні кольори.", 19.99, "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&h=400&auto=format&fit=crop"),
+            ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=600&h=400&auto=format&fit=crop"),
+            ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=600&h=400&auto=format&fit=crop"),
+            ("Штани Slim", "Стильні вузькі штани.", 49.99, "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=600&h=400&auto=format&fit=crop"),
+            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://images.unsplash.com/photo-1572804013307-a9a111984275?q=80&w=600&h=400&auto=format&fit=crop"),
+            ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=600&h=400&auto=format&fit=crop"),
         ]
         for p in sample_products:
             add_product(*p)
