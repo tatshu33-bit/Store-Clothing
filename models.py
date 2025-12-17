@@ -1,7 +1,8 @@
 import sqlite3
 from contextlib import closing
+import os
 
-DB_PATH = "db.sqlite"
+DB_PATH = os.environ.get('DB_PATH', "db.sqlite")
 
 def get_conn():
     conn = sqlite3.connect(DB_PATH)
