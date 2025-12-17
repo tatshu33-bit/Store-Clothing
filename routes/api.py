@@ -37,7 +37,7 @@ def add_product_api():
         
         if not title:
             return jsonify({'success': False, 'error': 'Title is required'}), 400
-        if not price:
+        if price is None:
             return jsonify({'success': False, 'error': 'Price is required'}), 400
         
         try:

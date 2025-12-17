@@ -207,9 +207,9 @@ function displayProducts(products) {
                     <div class="flex-grow-1">
                         <h6 class="mb-1">${escapeHtml(product.title)}</h6>
                         <p class="mb-1 text-muted small">${escapeHtml(product.description || 'No description')}</p>
-                        <p class="mb-0"><strong class="text-primary">$${product.price.toFixed(2)}</strong></p>
+                        <p class="mb-0"><strong class="text-primary">$${(product.price || 0).toFixed(2)}</strong></p>
                     </div>
-                    ${product.image_url ? `<img src="${product.image_url}" class="ms-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;" alt="${escapeHtml(product.title)}">` : ''}
+                    ${product.image_url ? `<img src="${escapeHtml(product.image_url)}" class="ms-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;" alt="${escapeHtml(product.title)}">` : ''}
                 </div>
             </div>
         `;
