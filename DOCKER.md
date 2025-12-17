@@ -7,6 +7,8 @@ This guide provides comprehensive instructions for running the Store Clothing ap
 - Docker Engine 20.10 or higher
 - Docker Compose 2.0 or higher
 
+> **Note**: This guide uses `docker-compose` commands (Compose V1). If you have Docker Compose V2, you can use `docker compose` (without hyphen) instead. Both versions work identically.
+
 ## Quick Start
 
 ### 1. Clone the Repository

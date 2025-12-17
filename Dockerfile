@@ -7,7 +7,7 @@ WORKDIR /app
 # Install dependencies in a virtual environment
 COPY requirements.txt .
 RUN python -m venv /opt/venv && \
-    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+    /opt/venv/bin/pip install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 
 # Final stage - minimal runtime image
 FROM python:3.11-slim
