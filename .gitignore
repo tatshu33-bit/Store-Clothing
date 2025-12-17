@@ -1,3 +1,13 @@
 __pycache__/
 db.sqlite
 .env
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+data/
