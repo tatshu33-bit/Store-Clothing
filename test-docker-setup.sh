@@ -41,20 +41,47 @@ echo ""
 
 # Check environment variables support
 echo "Checking environment variables configuration..."
-grep -q "os.environ.get" app.py && echo "✓ app.py supports environment variables" || echo "✗ app.py missing environment support"
-grep -q "os.environ.get" models.py && echo "✓ models.py supports environment variables" || echo "✗ models.py missing environment support"
+if ! grep -q "os.environ.get" app.py; then
+    echo "✗ app.py missing environment support"
+    exit 1
+fi
+echo "✓ app.py supports environment variables"
+
+if ! grep -q "os.environ.get" models.py; then
+    echo "✗ models.py missing environment support"
+    exit 1
+fi
+echo "✓ models.py supports environment variables"
 echo ""
 
 # Check for volume configuration
 echo "Checking volume configuration..."
-grep -q "volumes:" docker-compose.yml && echo "✓ docker-compose.yml has volume configuration" || echo "✗ docker-compose.yml missing volumes"
-grep -q "db-data:" docker-compose.yml && echo "✓ Persistent volume defined" || echo "✗ Persistent volume not defined"
+if ! grep -q "volumes:" docker-compose.yml; then
+    echo "✗ docker-compose.yml missing volumes"
+    exit 1
+fi
+echo "✓ docker-compose.yml has volume configuration"
+
+if ! grep -q "db-data:" docker-compose.yml; then
+    echo "✗ Persistent volume not defined"
+    exit 1
+fi
+echo "✓ Persistent volume defined"
 echo ""
 
 # Check health check configuration
 echo "Checking health check configuration..."
-grep -q "HEALTHCHECK" Dockerfile && echo "✓ Dockerfile has health check" || echo "✗ Dockerfile missing health check"
-grep -q "healthcheck:" docker-compose.yml && echo "✓ docker-compose.yml has health check" || echo "✗ docker-compose.yml missing health check"
+if ! grep -q "HEALTHCHECK" Dockerfile; then
+    echo "✗ Dockerfile missing health check"
+    exit 1
+fi
+echo "✓ Dockerfile has health check"
+
+if ! grep -q "healthcheck:" docker-compose.yml; then
+    echo "✗ docker-compose.yml missing health check"
+    exit 1
+fi
+echo "✓ docker-compose.yml has health check"
 echo ""
 
 echo "=== All checks passed! ==="
