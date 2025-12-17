@@ -1,3 +1,6 @@
+@"
+version: '3.8'
+
 services:
   web:
     build:
@@ -5,14 +8,13 @@ services:
       dockerfile: Dockerfile
     container_name: store-clothing-app
     ports:
-  - "5000:5000"
+      - "5000:5000"
     environment:
-      - FLASK_ENV=${FLASK_ENV:-production}
-      - SECRET_KEY=${SECRET_KEY:-default_secret_key_change_in_production}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-adminpass}
+      - FLASK_ENV=production
+      - SECRET_KEY=your_secret_key_here_change_in_production
+      - ADMIN_PASSWORD=adminpass
       - DB_PATH=/app/data/db.sqlite
     volumes:
-      # Persist SQLite database
       - sqlite_data:/app/data
     restart: unless-stopped
     healthcheck:
@@ -25,3 +27,4 @@ services:
 volumes:
   sqlite_data:
     driver: local
+"@ | Out-File -FilePath "docker-compose.yml" -Encoding UTF8
