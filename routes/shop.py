@@ -95,19 +95,20 @@ def checkout():
     if request.method == 'POST':
         name = request.form.get('name') or 'Клієнт'
         email = request.form.get('email')
+        phone = request.form.get('phone', '')
         # calculate total
         total = 0
         for pid, qty in cart.items():
             p = models.get_product(int(pid))
             if p:
                 total += p['price'] * qty
-        order_id = models.create_order(name, email, total)
+        order_id = models.create_order(name, email, total, phone)
         for pid, qty in cart.items():
             p = models.get_product(int(pid))
             if p:
                 models.add_order_item(order_id, int(pid), qty, p['price'])
         session['cart'] = {}
-        flash(f'Дякуємо! Замовлення {order_id} створено.', 'success')
+        flash(f'Дякуємо! Замовлення №{order_id} успішно створено. Очікуйте дзвінка для підтвердження.', 'success')
         return redirect(url_for('shop.shop'))
     # GET
     items = []

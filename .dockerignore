@@ -2,7 +2,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-db.sqlite
 .env
 venv/
 env/
@@ -16,3 +15,8 @@ env/
 *.egg-info/
 dist/
 build/
+.git/
+.gitignore
+db.sqlite
+README.md
+*.md

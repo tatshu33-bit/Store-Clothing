@@ -178,11 +178,11 @@ def get_product(product_id):
         return c.fetchone()
 
 # Orders and items
-def create_order(customer_name, customer_email, total):
+def create_order(customer_name, customer_email, total, customer_phone=None):
     with closing(get_conn()) as conn:
         c = conn.cursor()
-        c.execute('INSERT INTO orders (customer_name, customer_email, total) VALUES (?, ?, ?)',
-                  (customer_name, customer_email, total))
+        c.execute('INSERT INTO orders (customer_name, customer_email, customer_phone, total) VALUES (?, ?, ?, ?)',
+                  (customer_name, customer_email, customer_phone, total))
         conn.commit()
         return c.lastrowid
 

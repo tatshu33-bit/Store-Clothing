@@ -1,23 +1,114 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Оформлення замовлення</h2>
-  <h5>Склад замовлення</h5>
-  <ul>
-    {% for it in items %}
-      <li>{{ it.product.title }} × {{ it.qty }} — {{ "%.2f"|format(it.subtotal) }} USD</li>
-    {% endfor %}
-  </ul>
-  <p class="fw-bold">Всього: {{ "%.2f"|format(total) }} USD</p>
+  <h2 class="mb-4"><i class="bi bi-credit-card"></i> Оформлення замовлення</h2>
+  
+  <div class="row">
+    <div class="col-lg-7">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-person"></i> Контактна інформація</h5>
+        </div>
+        <div class="card-body">
+          <form method="post" id="checkoutForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="mb-3">
+              <label class="form-label">Ваше ім'я *</label>
+              <input name="name" class="form-control" required placeholder="Іван Іванов" maxlength="100">
+              <div class="form-text">Вкажіть ваше повне ім'я для доставки</div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Email *</label>
+              <input name="email" type="email" class="form-control" required placeholder="example@email.com">
+              <div class="form-text">На цю адресу буде надіслано підтвердження</div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Телефон</label>
+              <input name="phone" type="tel" class="form-control" placeholder="+380 (XX) XXX-XX-XX" maxlength="20">
+              <div class="form-text">Для зв'язку з вами щодо доставки</div>
+            </div>
 
-  <form method="post">
-    <div class="mb-3">
-      <label>Ваше ім'я</label>
-      <input name="name" class="form-control" required>
+            <div class="mb-3">
+              <label class="form-label">Адреса доставки</label>
+              <textarea name="address" class="form-control" rows="3" placeholder="Вулиця, будинок, квартира, місто, область"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Коментар до замовлення</label>
+              <textarea name="comment" class="form-control" rows="2" placeholder="Додаткові побажання"></textarea>
+            </div>
+
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="terms" required>
+              <label class="form-check-label" for="terms">
+                Я погоджуюсь з <a href="#" target="_blank">умовами обслуговування</a> *
+              </label>
+            </div>
+
+            <button class="btn btn-success btn-lg w-100" type="submit">
+              <i class="bi bi-check-circle"></i> Підтвердити замовлення
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="mb-3">
-      <label>Email</label>
-      <input name="email" type="email" class="form-control">
+
+    <div class="col-lg-5">
+      <!-- Order Summary -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0"><i class="bi bi-basket"></i> Склад замовлення</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            {% for it in items %}
+              <div class="list-group-item px-0">
+                <div class="d-flex align-items-center">
+                  <img src="{{ it.product.image_url }}" alt="{{ it.product.title }}" 
+                       style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-3">
+                  <div class="flex-grow-1">
+                    <strong>{{ it.product.title }}</strong><br>
+                    <small class="text-muted">{{ it.qty }} × {{ "%.2f"|format(it.product.price) }} грн</small>
+                  </div>
+                  <div class="text-end">
+                    <strong>{{ "%.2f"|format(it.subtotal) }} грн</strong>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          
+          <hr>
+          
+          <div class="d-flex justify-content-between mb-2">
+            <span>Товари:</span>
+            <span>{{ "%.2f"|format(total) }} грн</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Доставка:</span>
+            <span class="text-success">Безкоштовно</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between">
+            <strong>До сплати:</strong>
+            <strong class="text-primary fs-4">{{ "%.2f"|format(total) }} грн</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment info -->
+      <div class="card border-info shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title"><i class="bi bi-info-circle text-info"></i> Способи оплати</h6>
+          <ul class="list-unstyled small mb-0">
+            <li><i class="bi bi-check"></i> Оплата при отриманні</li>
+            <li><i class="bi bi-check"></i> Картою онлайн</li>
+            <li><i class="bi bi-check"></i> Готівкою кур'єру</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <button class="btn btn-success">Підтвердити замовлення</button>
-  </form>
+  </div>
 {% endblock %}

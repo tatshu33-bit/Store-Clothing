@@ -1,4 +1,5 @@
 from flask import Flask, session, redirect, url_for, render_template
+from flask_wtf.csrf import CSRFProtect
 from routes.admin import admin_bp
 from routes.feedback import feedback_bp
 from routes.shop import shop_bp
@@ -13,6 +14,10 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', os.urandom(24).hex())
 app.config['ADMIN_PASSWORD'] = os.getenv('ADMIN_PASSWORD', "adminpass")
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+app.config['WTF_CSRF_TIME_LIMIT'] = None  # CSRF tokens don't expire
+
+# Enable CSRF protection
+csrf = CSRFProtect(app)
 
 # ініціалізація БД (створює таблиці при першому запуску)
 models.init_db()

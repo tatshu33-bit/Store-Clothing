@@ -1,32 +1,79 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Зворотній зв'язок</h2>
-  <form method="post" class="mb-4">
-    <div class="mb-3">
-      <label>Ім'я</label>
-      <input name="name" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label>Email</label>
-      <input name="email" type="email" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label>Повідомлення</label>
-      <textarea name="message" class="form-control" rows="4" required></textarea>
-    </div>
-    <button class="btn btn-primary">Надіслати</button>
-  </form>
-
-  <h3>Відгуки від користувачів</h3>
-  {% for f in feedbacks %}
-    <div class="card mb-2">
-      <div class="card-body">
-        <h6 class="card-title">{{ f.name }} <small class="text-muted">({{ f.email }})</small></h6>
-        <p class="card-text">{{ f.message }}</p>
-        <small class="text-muted">{{ f.created_at }}</small>
+  <div class="row mb-4">
+    <div class="col-lg-6 mx-auto">
+      <h2 class="text-center mb-4"><i class="bi bi-chat-left-text"></i> Зворотній зв'язок</h2>
+      
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Залишити відгук або запитання</h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-person"></i> Ім'я</label>
+              <input name="name" class="form-control" placeholder="Анонім" maxlength="100">
+              <div class="form-text">Залиште порожнім для анонімного відгуку</div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-envelope"></i> Email</label>
+              <input name="email" type="email" class="form-control" placeholder="example@email.com" maxlength="100">
+              <div class="form-text">Опціонально, якщо бажаєте отримати відповідь</div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-chat-dots"></i> Повідомлення *</label>
+              <textarea name="message" class="form-control" rows="5" required 
+                        placeholder="Напишіть ваш відгук, запитання або пропозицію..." maxlength="1000"></textarea>
+            </div>
+            
+            <button class="btn btn-primary w-100" type="submit">
+              <i class="bi bi-send"></i> Надіслати
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  {% else %}
-    <p>Ще немає відгуків.</p>
-  {% endfor %}
+  </div>
+
+  <hr class="my-5">
+
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <h3 class="mb-4"><i class="bi bi-chat-quote"></i> Відгуки від користувачів</h3>
+      
+      {% if feedbacks %}
+        <div class="row">
+          {% for f in feedbacks %}
+            <div class="col-md-6 mb-3">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <h6 class="card-title mb-0">
+                        <i class="bi bi-person-circle text-primary"></i> 
+                        {{ f.name }}
+                      </h6>
+                      {% if f.email %}
+                        <small class="text-muted">{{ f.email }}</small>
+                      {% endif %}
+                    </div>
+                    <small class="text-muted">{{ f.created_at[:10] }}</small>
+                  </div>
+                  <p class="card-text">{{ f.message }}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle"></i> Ще немає відгуків. Будьте першим!
+        </div>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
