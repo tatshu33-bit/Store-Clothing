@@ -1,25 +1,92 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Магазин</h2>
+  <h2 class="mb-4">Магазин</h2>
+  
+  <!-- Search and Filter Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" action="{{ url_for('shop.shop') }}" class="row g-3">
+        <div class="col-md-4">
+          <input type="text" name="q" class="form-control" placeholder="Пошук товарів..." value="{{ current_query }}">
+        </div>
+        <div class="col-md-3">
+          <select name="category" class="form-select">
+            <option value="">Всі категорії</option>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}" {% if current_category == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <input type="number" name="min_price" class="form-control" placeholder="Мін. ціна" step="0.01" value="{{ request.args.get('min_price', '') }}">
+        </div>
+        <div class="col-md-2">
+          <input type="number" name="max_price" class="form-control" placeholder="Макс. ціна" step="0.01" value="{{ request.args.get('max_price', '') }}">
+        </div>
+        <div class="col-md-1">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-search"></i> Шукати
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
   <div class="row">
-    {% for p in products %}
-      <div class="col-md-4 mb-3">
-        <div class="card h-100">
-          <img src="{{ p.image_url }}" class="card-img-top" style="height:200px;object-fit:cover">
-          <div class="card-body d-flex flex-column">
-            <h5>{{ p.title }}</h5>
-            <p class="text-muted">{{ p.description }}</p>
-            <p class="fw-bold mt-auto">{{ "%.2f"|format(p.price) }} USD</p>
-            <div class="mt-2">
-              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('shop.product', pid=p.id) }}">Детальніше</a>
-              <form method="post" class="d-inline" action="{{ url_for('shop.cart_add', pid=p.id) }}">
-                <input type="hidden" name="quantity" value="1">
-                <button class="btn btn-sm btn-success">Додати</button>
-              </form>
+    {% if products %}
+      {% for p in products %}
+        <div class="col-md-4 col-lg-3 mb-4">
+          <div class="card h-100 shadow-sm product-card">
+            <img src="{{ p.image_url }}" class="card-img-top" style="height:200px;object-fit:cover" alt="{{ p.title }}">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ p.title }}</h5>
+              <p class="card-text text-muted small">{{ p.description[:60] }}...</p>
+              {% if p.rating %}
+                <div class="mb-2">
+                  <span class="text-warning">
+                    {% for i in range(p.rating|int) %}★{% endfor %}
+                    {% for i in range(5 - p.rating|int) %}☆{% endfor %}
+                  </span>
+                  <small class="text-muted">({{ "%.1f"|format(p.rating) }})</small>
+                </div>
+              {% endif %}
+              <p class="fw-bold text-primary fs-5 mt-auto">{{ "%.2f"|format(p.price) }} грн</p>
+              {% if p.stock %}
+                <small class="text-success">В наявності: {{ p.stock }}</small>
+              {% else %}
+                <small class="text-danger">Немає в наявності</small>
+              {% endif %}
+              <div class="mt-2 d-grid gap-2">
+                <a class="btn btn-sm btn-outline-primary" href="{{ url_for('shop.product', pid=p.id) }}">Детальніше</a>
+                {% if p.stock and p.stock > 0 %}
+                  <form method="post" action="{{ url_for('shop.cart_add', pid=p.id) }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button class="btn btn-sm btn-success w-100">Додати в кошик</button>
+                  </form>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info">
+          <h4>Товари не знайдено</h4>
+          <p>Спробуйте змінити параметри пошуку або <a href="{{ url_for('shop.shop') }}">перегляньте всі товари</a>.</p>
+        </div>
       </div>
-    {% endfor %}
+    {% endif %}
   </div>
+
+  <style>
+    .product-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+    }
+  </style>
 {% endblock %}

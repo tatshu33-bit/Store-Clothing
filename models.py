@@ -21,6 +21,14 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
+        # categories table
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE,
+                description TEXT
+            )
+        ''')
         # products table
         c.execute('''
             CREATE TABLE IF NOT EXISTS products (
@@ -28,7 +36,11 @@ def init_db():
                 title TEXT NOT NULL,
                 description TEXT,
                 price REAL NOT NULL,
-                image_url TEXT
+                image_url TEXT,
+                category_id INTEGER,
+                rating REAL DEFAULT 0.0,
+                stock INTEGER DEFAULT 0,
+                FOREIGN KEY(category_id) REFERENCES categories(id)
             )
         ''')
         # orders table
@@ -37,6 +49,7 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 customer_name TEXT,
                 customer_email TEXT,
+                customer_phone TEXT,
                 status TEXT DEFAULT 'new',
                 total REAL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -54,19 +67,52 @@ def init_db():
                 FOREIGN KEY(product_id) REFERENCES products(id)
             )
         ''')
+        # reviews table
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS reviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_id INTEGER,
+                customer_name TEXT,
+                rating INTEGER CHECK(rating >= 1 AND rating <= 5),
+                comment TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(product_id) REFERENCES products(id)
+            )
+        ''')
         conn.commit()
+    # insert sample categories if empty
+    if len(get_categories()) == 0:
+        sample_categories = [
+            ("Футболки та топи", "Повсякденний верхній одяг"),
+            ("Сорочки", "Офіційний та casual одяг"),
+            ("Куртки та пальта", "Верхній одяг для різних сезонів"),
+            ("Штани та джинси", "Нижній одяг"),
+            ("Сукні", "Жіночий одяг"),
+            ("Аксесуари", "Доповнення до образу"),
+        ]
+        for name, desc in sample_categories:
+            add_category(name, desc)
+    
     # insert sample products if empty
     if len(get_products()) == 0:
+        # Get category IDs
+        categories = get_categories()
+        cat_dict = {cat['name']: cat['id'] for cat in categories}
+        
         sample_products = [
-            ("Футболка Classic", "Бавовняна футболка, різні кольори.", 19.99, "https://picsum.photos/seed/t1/600/400"),
-            ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, "https://picsum.photos/seed/t2/600/400"),
-            ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, "https://picsum.photos/seed/t3/600/400"),
-            ("Штани Slim", "Стильні вузькі штани.", 49.99, "https://picsum.photos/seed/t4/600/400"),
-            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://picsum.photos/seed/t5/600/400"),
-            ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, "https://picsum.photos/seed/t6/600/400"),
+            ("Футболка Classic", "Бавовняна футболка, різні кольори.", 19.99, "https://picsum.photos/seed/t1/600/400", cat_dict.get("Футболки та топи"), 30),
+            ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, "https://picsum.photos/seed/t2/600/400", cat_dict.get("Сорочки"), 25),
+            ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, "https://picsum.photos/seed/t3/600/400", cat_dict.get("Куртки та пальта"), 15),
+            ("Штани Slim", "Стильні вузькі штани.", 49.99, "https://picsum.photos/seed/t4/600/400", cat_dict.get("Штани та джинси"), 40),
+            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://picsum.photos/seed/t5/600/400", cat_dict.get("Сукні"), 20),
+            ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, "https://picsum.photos/seed/t6/600/400", cat_dict.get("Аксесуари"), 50),
         ]
-        for p in sample_products:
-            add_product(*p)
+        for title, desc, price, img, cat_id, stock in sample_products:
+            with closing(get_conn()) as conn:
+                c = conn.cursor()
+                c.execute('INSERT INTO products (title, description, price, image_url, category_id, stock) VALUES (?, ?, ?, ?, ?, ?)',
+                          (title, desc, price, img, cat_id, stock))
+                conn.commit()
 
 # Feedback operations
 def add_feedback(name, email, message):
@@ -132,11 +178,11 @@ def get_product(product_id):
         return c.fetchone()
 
 # Orders and items
-def create_order(customer_name, customer_email, total):
+def create_order(customer_name, customer_email, total, customer_phone=None):
     with closing(get_conn()) as conn:
         c = conn.cursor()
-        c.execute('INSERT INTO orders (customer_name, customer_email, total) VALUES (?, ?, ?)',
-                  (customer_name, customer_email, total))
+        c.execute('INSERT INTO orders (customer_name, customer_email, customer_phone, total) VALUES (?, ?, ?, ?)',
+                  (customer_name, customer_email, customer_phone, total))
         conn.commit()
         return c.lastrowid
 
@@ -174,3 +220,88 @@ def update_order_status(order_id, status):
         c = conn.cursor()
         c.execute('UPDATE orders SET status=? WHERE id=?', (status, order_id))
         conn.commit()
+
+# Category operations
+def add_category(name, description=None):
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('INSERT INTO categories (name, description) VALUES (?, ?)', (name, description))
+        conn.commit()
+        return c.lastrowid
+
+def get_categories():
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('SELECT * FROM categories ORDER BY name')
+        return c.fetchall()
+
+def get_category(category_id):
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('SELECT * FROM categories WHERE id=?', (category_id,))
+        return c.fetchone()
+
+# Search and filter operations
+def search_products(query=None, category_id=None, min_price=None, max_price=None, sort_by='id', sort_order='DESC'):
+    # Whitelist allowed sort fields and orders to prevent SQL injection
+    allowed_sort_fields = ['id', 'title', 'price', 'rating', 'created_at']
+    allowed_sort_orders = ['ASC', 'DESC']
+    
+    # Validate and sanitize sort parameters
+    if sort_by not in allowed_sort_fields:
+        sort_by = 'id'
+    if sort_order.upper() not in allowed_sort_orders:
+        sort_order = 'DESC'
+    
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        sql = 'SELECT * FROM products WHERE 1=1'
+        params = []
+        
+        if query:
+            sql += ' AND (title LIKE ? OR description LIKE ?)'
+            params.extend([f'%{query}%', f'%{query}%'])
+        
+        if category_id:
+            sql += ' AND category_id = ?'
+            params.append(category_id)
+        
+        if min_price is not None:
+            sql += ' AND price >= ?'
+            params.append(min_price)
+        
+        if max_price is not None:
+            sql += ' AND price <= ?'
+            params.append(max_price)
+        
+        sql += f' ORDER BY {sort_by} {sort_order.upper()}'
+        
+        c.execute(sql, params)
+        return c.fetchall()
+
+# Review operations
+def add_review(product_id, customer_name, rating, comment):
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('INSERT INTO reviews (product_id, customer_name, rating, comment) VALUES (?, ?, ?, ?)',
+                  (product_id, customer_name, rating, comment))
+        conn.commit()
+        # Update product rating
+        c.execute('SELECT AVG(rating) FROM reviews WHERE product_id=?', (product_id,))
+        avg_rating = c.fetchone()[0]
+        c.execute('UPDATE products SET rating=? WHERE id=?', (avg_rating, product_id))
+        conn.commit()
+        return c.lastrowid
+
+def get_reviews(product_id):
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('SELECT * FROM reviews WHERE product_id=? ORDER BY created_at DESC', (product_id,))
+        return c.fetchall()
+
+def get_product_rating(product_id):
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('SELECT AVG(rating), COUNT(*) FROM reviews WHERE product_id=?', (product_id,))
+        result = c.fetchone()
+        return {'avg_rating': result[0] or 0, 'count': result[1]}
