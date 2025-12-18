@@ -20,6 +20,14 @@
       <input name="price" type="number" step="0.01" class="form-control" value="{{ product.price if product else '' }}" required>
     </div>
     <div class="mb-3">
+      <label>Кількість на складі</label>
+      <input name="stock" type="number" class="form-control" value="{{ product.stock if product else '0' }}" required>
+    </div>
+    <div class="mb-3">
+      <label>Категорія</label>
+      <input name="category" class="form-control" value="{{ product.category if product else '' }}">
+    </div>
+    <div class="mb-3">
       <label>URL зображення</label>
       <input name="image_url" class="form-control" value="{{ product.image_url if product else '' }}">
     </div>

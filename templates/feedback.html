@@ -14,6 +14,17 @@
       <label>Повідомлення</label>
       <textarea name="message" class="form-control" rows="4" required></textarea>
     </div>
+    <div class="mb-3">
+      <label>Рейтинг</label>
+      <select name="rating" class="form-control">
+        <option value="">Не вказано</option>
+        <option value="1">⭐ 1</option>
+        <option value="2">⭐⭐ 2</option>
+        <option value="3">⭐⭐⭐ 3</option>
+        <option value="4">⭐⭐⭐⭐ 4</option>
+        <option value="5">⭐⭐⭐⭐⭐ 5</option>
+      </select>
+    </div>
     <button class="btn btn-primary">Надіслати</button>
   </form>
 
@@ -21,7 +32,11 @@
   {% for f in feedbacks %}
     <div class="card mb-2">
       <div class="card-body">
-        <h6 class="card-title">{{ f.name }} <small class="text-muted">({{ f.email }})</small></h6>
+        <h6 class="card-title">{{ f.name }} <small class="text-muted">({{ f.email }})</small>
+        {% if f.rating %}
+          <span class="badge bg-warning text-dark">{% for i in range(f.rating) %}⭐{% endfor %} {{ f.rating }}/5</span>
+        {% endif %}
+        </h6>
         <p class="card-text">{{ f.message }}</p>
         <small class="text-muted">{{ f.created_at }}</small>
       </div>

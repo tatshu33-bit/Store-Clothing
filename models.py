@@ -15,9 +15,11 @@ def init_db():
         c.execute('''
             CREATE TABLE IF NOT EXISTS feedback (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
                 name TEXT NOT NULL,
                 email TEXT,
                 message TEXT NOT NULL,
+                rating INTEGER CHECK(rating >= 1 AND rating <= 5),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -28,6 +30,8 @@ def init_db():
                 title TEXT NOT NULL,
                 description TEXT,
                 price REAL NOT NULL,
+                stock INTEGER DEFAULT 0,
+                category TEXT,
                 image_url TEXT
             )
         ''')
@@ -58,21 +62,22 @@ def init_db():
     # insert sample products if empty
     if len(get_products()) == 0:
         sample_products = [
-            ("Футболка Classic", "Бавовняна футболка, різні кольори.", 19.99, "https://picsum.photos/seed/t1/600/400"),
-            ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, "https://picsum.photos/seed/t2/600/400"),
-            ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, "https://picsum.photos/seed/t3/600/400"),
-            ("Штани Slim", "Стильні вузькі штани.", 49.99, "https://picsum.photos/seed/t4/600/400"),
-            ("Сукня Summer", "Легка літня сукня.", 59.99, "https://picsum.photos/seed/t5/600/400"),
-            ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, "https://picsum.photos/seed/t6/600/400"),
+            ("Футболка Classic", "Бавовняна футболка, різні кольори.", 19.99, 50, "Tops", "https://picsum.photos/seed/t1/600/400"),
+            ("Сорочка Formal", "Елегантна сорочка для офісу.", 39.99, 30, "Shirts", "https://picsum.photos/seed/t2/600/400"),
+            ("Куртка Cozy", "Тепла куртка на холодну погоду.", 89.99, 20, "Outerwear", "https://picsum.photos/seed/t3/600/400"),
+            ("Штани Slim", "Стильні вузькі штани.", 49.99, 40, "Bottoms", "https://picsum.photos/seed/t4/600/400"),
+            ("Сукня Summer", "Легка літня сукня.", 59.99, 25, "Dresses", "https://picsum.photos/seed/t5/600/400"),
+            ("Кепка Sport", "Кепка для спорту та прогулянок.", 14.99, 100, "Accessories", "https://picsum.photos/seed/t6/600/400"),
         ]
         for p in sample_products:
             add_product(*p)
 
 # Feedback operations
-def add_feedback(name, email, message):
+def add_feedback(name, email, message, rating=None, user_id=None):
     with closing(get_conn()) as conn:
         c = conn.cursor()
-        c.execute('INSERT INTO feedback (name, email, message) VALUES (?, ?, ?)', (name, email, message))
+        c.execute('INSERT INTO feedback (name, email, message, rating, user_id) VALUES (?, ?, ?, ?, ?)', 
+                  (name, email, message, rating, user_id))
         conn.commit()
         return c.lastrowid
 
@@ -88,6 +93,13 @@ def get_feedback(feedback_id):
         c.execute('SELECT * FROM feedback WHERE id=?', (feedback_id,))
         return c.fetchone()
 
+def update_feedback(feedback_id, name, email, message, rating=None):
+    with closing(get_conn()) as conn:
+        c = conn.cursor()
+        c.execute('UPDATE feedback SET name=?, email=?, message=?, rating=? WHERE id=?',
+                  (name, email, message, rating, feedback_id))
+        conn.commit()
+
 def delete_feedback(feedback_id):
     with closing(get_conn()) as conn:
         c = conn.cursor()
@@ -95,19 +107,19 @@ def delete_feedback(feedback_id):
         conn.commit()
 
 # Product operations
-def add_product(title, description, price, image_url=None):
+def add_product(title, description, price, stock=0, category=None, image_url=None):
     with closing(get_conn()) as conn:
         c = conn.cursor()
-        c.execute('INSERT INTO products (title, description, price, image_url) VALUES (?, ?, ?, ?)',
-                  (title, description, price, image_url))
+        c.execute('INSERT INTO products (title, description, price, stock, category, image_url) VALUES (?, ?, ?, ?, ?, ?)',
+                  (title, description, price, stock, category, image_url))
         conn.commit()
         return c.lastrowid
 
-def update_product(product_id, title, description, price, image_url):
+def update_product(product_id, title, description, price, stock, category, image_url):
     with closing(get_conn()) as conn:
         c = conn.cursor()
-        c.execute('UPDATE products SET title=?, description=?, price=?, image_url=? WHERE id=?',
-                  (title, description, price, image_url, product_id))
+        c.execute('UPDATE products SET title=?, description=?, price=?, stock=?, category=?, image_url=? WHERE id=?',
+                  (title, description, price, stock, category, image_url, product_id))
         conn.commit()
 
 def delete_product(product_id):

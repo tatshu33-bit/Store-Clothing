@@ -9,10 +9,13 @@ def feedback():
         name = request.form.get('name') or 'Анонім'
         email = request.form.get('email')
         message = request.form.get('message')
+        rating = request.form.get('rating')
+        if rating:
+            rating = int(rating)
         if not message:
             flash('Повідомлення не може бути порожнім', 'danger')
             return redirect(url_for('feedback.feedback'))
-        models.add_feedback(name, email, message)
+        models.add_feedback(name, email, message, rating=rating)
         flash('Дякуємо! Ваш відгук надіслано.', 'success')
         return redirect(url_for('feedback.feedback'))
     feedbacks = models.get_feedbacks()
