@@ -243,6 +243,16 @@ def get_category(category_id):
 
 # Search and filter operations
 def search_products(query=None, category_id=None, min_price=None, max_price=None, sort_by='id', sort_order='DESC'):
+    # Whitelist allowed sort fields and orders to prevent SQL injection
+    allowed_sort_fields = ['id', 'title', 'price', 'rating', 'created_at']
+    allowed_sort_orders = ['ASC', 'DESC']
+    
+    # Validate and sanitize sort parameters
+    if sort_by not in allowed_sort_fields:
+        sort_by = 'id'
+    if sort_order.upper() not in allowed_sort_orders:
+        sort_order = 'DESC'
+    
     with closing(get_conn()) as conn:
         c = conn.cursor()
         sql = 'SELECT * FROM products WHERE 1=1'
@@ -264,7 +274,7 @@ def search_products(query=None, category_id=None, min_price=None, max_price=None
             sql += ' AND price <= ?'
             params.append(max_price)
         
-        sql += f' ORDER BY {sort_by} {sort_order}'
+        sql += f' ORDER BY {sort_by} {sort_order.upper()}'
         
         c.execute(sql, params)
         return c.fetchall()
