@@ -10,16 +10,16 @@
             <h5>{{ p.title }}</h5>
             <p class="text-muted">{{ p.description }}</p>
             <p class="fw-bold mt-auto">{{ "%.2f"|format(p.price) }} USD</p>
+
             <div class="mt-2">
-              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('shop.product', pid=p.id) }}">Детальніше</a>
-              <form method="post" class="d-inline" action="{{ url_for('shop.cart_add', pid=p.id) }}">
-                <input type="hidden" name="quantity" value="1">
-                <button class="btn btn-sm btn-success">Додати</button>
-              </form>
+              <button class="btn btn-sm btn-outline-secondary" disabled>Детальніше</button>
+              <button class="btn btn-sm btn-success" disabled>Додати</button>
             </div>
+
           </div>
         </div>
       </div>
     {% endfor %}
   </div>
 {% endblock %}
+
