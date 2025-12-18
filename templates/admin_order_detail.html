@@ -16,11 +16,10 @@
     <div class="mb-3">
       <label>Оновити статус</label>
       <select name="status" class="form-select">
-        <option value="new" {% if order.status=='new' %}selected{% endif %}>new</option>
-        <option value="processing" {% if order.status=='processing' %}selected{% endif %}>processing</option>
-        <option value="shipped" {% if order.status=='shipped' %}selected{% endif %}>shipped</option>
-        <option value="completed" {% if order.status=='completed' %}selected{% endif %}>completed</option>
-        <option value="cancelled" {% if order.status=='cancelled' %}selected{% endif %}>cancelled</option>
+        <option value="pending" {% if order.status=='pending' %}selected{% endif %}>Pending</option>
+        <option value="processing" {% if order.status=='processing' %}selected{% endif %}>Processing</option>
+        <option value="completed" {% if order.status=='completed' %}selected{% endif %}>Completed</option>
+        <option value="canceled" {% if order.status=='canceled' %}selected{% endif %}>Canceled</option>
       </select>
     </div>
     <button class="btn btn-primary">Оновити</button>
