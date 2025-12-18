@@ -117,7 +117,7 @@ def admin_login():
             return redirect(url_for("shop"))
         else:
             flash("Невірний пароль", "danger")
-    return render_template("admin.html")
+    return render_template("admin_login.html")
 
 # ---- Запуск сервера ----
 if __name__ == "__main__":

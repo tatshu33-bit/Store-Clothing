@@ -13,7 +13,8 @@
           <label>Кількість</label>
           <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:120px">
         </div>
-        <button class="btn btn-success">Додати в кошик</button>
+        <button class="btn btn-success me-2">Додати в кошик</button>
+        <button type="submit" formaction="{{ url_for('checkout') }}" class="btn btn-primary">Купити зараз</button>
       </form>
     </div>
   </div>

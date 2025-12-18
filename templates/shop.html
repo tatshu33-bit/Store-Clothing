@@ -12,15 +12,22 @@
             <p class="fw-bold mt-auto">{{ "%.2f"|format(p.price) }} USD</p>
 
             <div class="mt-2">
-              <!-- Кнопка Детальніше -->
-              <a href="{{ url_for('product', pid=p.id) }}">Детальніше</a>
+              <div class="d-flex gap-1 flex-wrap">
+                <!-- Кнопка Детальніше -->
+                <a href="{{ url_for('product', pid=p.id) }}" class="btn btn-sm btn-outline-secondary">Детальніше</a>
 
+                <!-- Форма Додати в кошик -->
+                <form method="post" action="{{ url_for('cart_add', pid=p.id) }}" class="d-inline">
+                  <input type="hidden" name="quantity" value="1">
+                  <button class="btn btn-sm btn-success">Додати в кошик</button>
+                </form>
 
-              <!-- Форма Додати в кошик -->
-              <form method="post" action="{{ url_for('cart_add', pid=p.id) }}">
-                <input type="hidden" name="quantity" value="1">
-                <button class="btn btn-sm btn-success">Додати в кошик</button>
-              </form>
+                <!-- Форма Купити -->
+                <form method="post" action="{{ url_for('cart_add', pid=p.id) }}" class="d-inline">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" formaction="{{ url_for('checkout') }}" class="btn btn-sm btn-primary">Купити</button>
+                </form>
+              </div>
             </div>
 
           </div>
