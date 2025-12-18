@@ -1,26 +1,27 @@
-from flask import Flask, session, redirect, url_for
-from routes.admin import admin_bp
-from routes.feedback import feedback_bp
-from routes.shop import shop_bp
-import models
+from flask import Flask, render_template
 
 app = Flask(__name__)
-app.secret_key = "replace_this_with_a_secure_key"
-app.config['ADMIN_PASSWORD'] = "1"
+app.secret_key = "secret"
 
-# ініціалізація БД (створює таблиці при першому запуску)
-models.init_db()
-
-# реєстрація blueprint-ів
-app.register_blueprint(admin_bp, url_prefix='/admin')
-app.register_blueprint(feedback_bp)
-app.register_blueprint(shop_bp)
-
-@app.route('/')
+@app.route("/")
 def index():
-    from flask import render_template
-    products = models.get_products(limit=6)
-    return render_template('index.html', products=products)
+    return render_template("index.html")
 
-if __name__ == '__main__':
+@app.route("/shop")
+def shop():
+    return render_template("shop.html")
+
+@app.route("/cart")
+def cart_view():
+    return render_template("cart.html")
+
+@app.route("/feedback")
+def feedback():
+    return render_template("feedback.html")
+
+@app.route("/admin/login")
+def admin_login():
+    return render_template("admin.html")
+
+if __name__ == "__main__":
     app.run(debug=True)
