@@ -5,7 +5,9 @@ from routes.shop import shop_bp
 from routes.feedback import feedback_bp
 
 app = Flask(__name__)
+# TODO: Move to environment variable for production (e.g., os.environ.get('SECRET_KEY'))
 app.secret_key = "replace_this_with_secure_key"
+# TODO: Move to environment variable and use hashed password for production
 app.config['ADMIN_PASSWORD'] = "adminpass"
 
 # Initialize database
