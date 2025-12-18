@@ -1,44 +1,41 @@
 {% extends "base.html" %}
+
 {% block content %}
-  <div class="row mb-4">
-    <div class="col">
-      <div class="p-4 bg-light rounded">
-        <h1>Ласкаво просимо до ClothesShop</h1>
-        <p>Стильний одяг, швидка доставка, зручний кошик та відгуки клієнтів.</p>
-        <a class="btn btn-primary" href="{{ url_for('shop.shop') }}">Перейти до магазину</a>
-      </div>
+<div class="row mb-4">
+  <div class="col">
+    <div class="p-4 bg-light rounded">
+      <h1>Ласкаво просимо до ClothesShop</h1>
+      <p>Стильний одяг, швидка доставка, зручний кошик та відгуки клієнтів.</p>
+      <a class="btn btn-primary" href="{{ url_for('shop') }}">Перейти до магазину</a>
     </div>
   </div>
+</div>
 
-  <h3>Популярні товари</h3>
-  <div class="row">
-    {% for p in products %}
-      <div class="col-md-4 mb-3">
-        <div class="card">
-          <img src="{{ p.image_url }}" class="card-img-top" style="height:200px;object-fit:cover">
-          <div class="card-body">
-            <h5 class="card-title">{{ p.title }}</h5>
-            <p class="card-text">{{ p.description }}</p>
-            <p class="fw-bold">{{ "%.2f"|format(p.price) }} USD</p>
-
-            <!-- Кнопка Детальніше -->
-            <a href="{{ url_for('shop.product', pid=p.id) }}" class="btn btn-sm btn-outline-secondary mb-1">Детальніше</a>
-
-            <!-- Форма для додавання до кошика -->
-            <form method="post" action="{{ url_for('shop.cart_add', pid=p.id) }}">
-              <input type="hidden" name="quantity" value="1">
-              <button class="btn btn-sm btn-success">Додати в кошик</button>
-            </form>
-
-          </div>
+<h3>Популярні товари</h3>
+<div class="row">
+  {% for p in products %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <img src="{{ p.image_url }}" class="card-img-top" style="height:200px;object-fit:cover">
+        <div class="card-body">
+          <h5 class="card-title">{{ p.title }}</h5>
+          <p class="card-text">{{ p.description }}</p>
+          <p class="fw-bold">{{ "%.2f"|format(p.price) }} USD</p>
+          <a href="{{ url_for('product', pid=p.id) }}" class="btn btn-sm btn-outline-secondary">Детальніше</a>
+          <form method="post" action="{{ url_for('cart_add', pid=p.id) }}" class="d-inline">
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn btn-sm btn-success">Додати в кошик</button>
+          </form>
         </div>
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
+</div>
 
-  <hr>
-  <div id="about" class="p-3">
-    <h4>Про нас</h4>
-    <p>Місцевий магазин одягу. Ми пропонуємо якісні товари по доступним цінам.</p>
-  </div>
+<hr>
+<div id="about" class="p-3">
+  <h4>Про нас</h4>
+  <p>Місцевий магазин одягу. Ми пропонуємо якісні товари по доступним цінам.</p>
+</div>
 {% endblock %}
+
