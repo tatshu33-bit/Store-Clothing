@@ -19,14 +19,19 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Головна</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('shop') }}">Магазин</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('cart_view') }}">Кошик</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.shop') }}">Магазин</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('shop.cart_view') }}">Кошик</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#about">Про нас</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('feedback') }}">Зворотній зв'язок</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('feedback.feedback') }}">Зворотній зв'язок</a></li>
       </ul>
 
       <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_login') }}">Адмін</a></li>
+        {% if session.get('is_admin') %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}">Панель адміна</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.logout') }}">Вийти</a></li>
+        {% else %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.login') }}">Адмін</a></li>
+        {% endif %}
       </ul>
     </div>
   </div>

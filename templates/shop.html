@@ -13,13 +13,13 @@
 
             <div class="mt-2">
               <!-- Кнопка Детальніше -->
-              <a href="{{ url_for('product', pid=p.id) }}">Детальніше</a>
+              <a href="{{ url_for('shop.product', pid=p.id) }}" class="btn btn-sm btn-outline-secondary">Детальніше</a>
 
 
               <!-- Форма Додати в кошик -->
-              <form method="post" action="{{ url_for('cart_add', pid=p.id) }}">
+              <form method="post" action="{{ url_for('shop.cart_add', pid=p.id) }}" class="d-inline">
                 <input type="hidden" name="quantity" value="1">
-                <button class="btn btn-sm btn-success">Додати в кошик</button>
+                <button class="btn btn-sm btn-success">Купити</button>
               </form>
             </div>
 

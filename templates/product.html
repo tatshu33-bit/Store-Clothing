@@ -8,12 +8,12 @@
       <h2>{{ product.title }}</h2>
       <p>{{ product.description }}</p>
       <p class="fw-bold">{{ "%.2f"|format(product.price) }} USD</p>
-      <form method="post" action="{{ url_for('cart_add', pid=product.id) }}">
+      <form method="post" action="{{ url_for('shop.cart_add', pid=product.id) }}">
         <div class="mb-3">
           <label>Кількість</label>
           <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:120px">
         </div>
-        <button class="btn btn-success">Додати в кошик</button>
+        <button class="btn btn-success">Купити</button>
       </form>
     </div>
   </div>
