@@ -14,6 +14,7 @@
             <td>{{ "%.2f"|format(it.subtotal) }} USD</td>
             <td>
               <form method="post" action="{{ url_for('shop.cart_remove', pid=it.product.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <button class="btn btn-sm btn-danger">Видалити</button>
               </form>
             </td>

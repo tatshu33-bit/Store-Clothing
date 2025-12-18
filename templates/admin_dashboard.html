@@ -13,6 +13,7 @@
         <strong>{{ f.name }}</strong> <small class="text-muted">{{ f.created_at }}</small>
         <p>{{ f.message }}</p>
         <form method="post" action="{{ url_for('admin.delete_feedback', fid=f.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
           <button class="btn btn-danger btn-sm">Видалити</button>
         </form>
       </div>

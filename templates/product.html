@@ -9,6 +9,7 @@
       <p>{{ product.description }}</p>
       <p class="fw-bold">{{ "%.2f"|format(product.price) }} USD</p>
       <form method="post" action="{{ url_for('shop.cart_add', pid=product.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="mb-3">
           <label>Кількість</label>
           <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:120px">

@@ -2,6 +2,7 @@
 {% block content %}
   <h2>Зворотній зв'язок</h2>
   <form method="post" class="mb-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="mb-3">
       <label>Ім'я</label>
       <input name="name" class="form-control">
