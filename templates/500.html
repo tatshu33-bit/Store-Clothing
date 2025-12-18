@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="text-center py-5">
+    <h1 class="display-1">500</h1>
+    <h2>Внутрішня помилка сервера</h2>
+    <p class="lead">Вибачте, щось пішло не так. Спробуйте пізніше.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Повернутися на головну</a>
+  </div>
+{% endblock %}
