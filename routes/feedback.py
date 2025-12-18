@@ -11,7 +11,11 @@ def feedback():
         message = request.form.get('message')
         rating = request.form.get('rating')
         if rating:
-            rating = int(rating)
+            try:
+                rating = int(rating)
+            except (ValueError, TypeError):
+                flash('Невірний формат рейтингу', 'danger')
+                return redirect(url_for('feedback.feedback'))
         if not message:
             flash('Повідомлення не може бути порожнім', 'danger')
             return redirect(url_for('feedback.feedback'))

@@ -51,8 +51,12 @@ def add_product():
     if request.method == 'POST':
         title = request.form.get('title')
         desc = request.form.get('description')
-        price = float(request.form.get('price') or 0)
-        stock = int(request.form.get('stock') or 0)
+        try:
+            price = float(request.form.get('price') or 0)
+            stock = int(request.form.get('stock') or 0)
+        except (ValueError, TypeError):
+            flash('Невірний формат ціни або кількості', 'danger')
+            return render_template('admin_product_form.html', product=None)
         category = request.form.get('category')
         image = request.form.get('image_url')
         models.add_product(title, desc, price, stock, category, image)
@@ -70,8 +74,12 @@ def edit_product(pid):
     if request.method == 'POST':
         title = request.form.get('title')
         desc = request.form.get('description')
-        price = float(request.form.get('price') or 0)
-        stock = int(request.form.get('stock') or 0)
+        try:
+            price = float(request.form.get('price') or 0)
+            stock = int(request.form.get('stock') or 0)
+        except (ValueError, TypeError):
+            flash('Невірний формат ціни або кількості', 'danger')
+            return render_template('admin_product_form.html', product=p)
         category = request.form.get('category')
         image = request.form.get('image_url')
         models.update_product(pid, title, desc, price, stock, category, image)
