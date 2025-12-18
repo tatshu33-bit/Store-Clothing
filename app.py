@@ -1,4 +1,5 @@
 from flask import Flask, session, redirect, url_for
+from flask_wtf.csrf import CSRFProtect
 from routes.admin import admin_bp
 from routes.feedback import feedback_bp
 from routes.shop import shop_bp
@@ -7,6 +8,9 @@ import models
 app = Flask(__name__)
 app.secret_key = "replace_this_with_a_secure_key"
 app.config['ADMIN_PASSWORD'] = "1"
+
+# Initialize CSRF protection
+csrf = CSRFProtect(app)
 
 # ініціалізація БД (створює таблиці при першому запуску)
 models.init_db()

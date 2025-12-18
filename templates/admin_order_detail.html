@@ -13,6 +13,7 @@
   </ul>
 
   <form method="post" action="{{ url_for('admin.update_status', oid=order.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="mb-3">
       <label>Оновити статус</label>
       <select name="status" class="form-select">

@@ -7,6 +7,7 @@
     <h2>Додати товар</h2>
   {% endif %}
   <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="mb-3">
       <label>Назва</label>
       <input name="title" class="form-control" value="{{ product.title if product else '' }}" required>

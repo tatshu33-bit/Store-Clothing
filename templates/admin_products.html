@@ -13,6 +13,7 @@
           <td>
             <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.edit_product', pid=p.id) }}">Редагувати</a>
             <form method="post" action="{{ url_for('admin.delete_product', pid=p.id) }}" style="display:inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
               <button class="btn btn-sm btn-danger">Видалити</button>
             </form>
           </td>

@@ -10,6 +10,7 @@
   <p class="fw-bold">Всього: {{ "%.2f"|format(total) }} USD</p>
 
   <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="mb-3">
       <label>Ваше ім'я</label>
       <input name="name" class="form-control" required>
