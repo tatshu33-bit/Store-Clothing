@@ -2,7 +2,7 @@
 {% block content %}
   {% if product %}
     <h2>Редагувати товар</h2>
-    action = edit
+    {% set action = 'edit' %}
   {% else %}
     <h2>Додати товар</h2>
   {% endif %}
