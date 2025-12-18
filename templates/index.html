@@ -27,10 +27,7 @@
               <input type="hidden" name="quantity" value="1">
               <button class="btn btn-sm btn-success">Додати в кошик</button>
             </form>
-            <form method="post" action="{{ url_for('cart_add', pid=p.id) }}" class="d-inline">
-              <input type="hidden" name="quantity" value="1">
-              <button type="submit" formaction="{{ url_for('checkout') }}" class="btn btn-sm btn-primary">Купити</button>
-            </form>
+            <a href="{{ url_for('checkout') }}" class="btn btn-sm btn-primary">Купити</a>
           </div>
         </div>
       </div>
