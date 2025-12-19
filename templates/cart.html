@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container my-4">
   <h2>Кошик</h2>
   {% if items %}
     <table class="table">
       <thead>
-        <tr><th>Товар</th><th>Кількість</th><th>Підсумок</th><th></th></tr>
+        <tr><th>Товар</th><th>Кількість</th><th>Підсумок</th><th>Дія</th></tr>
       </thead>
       <tbody>
         {% for it in items %}
           <tr>
-            <td>{{ it.product.title }}</td>
-            <td>{{ it.qty }}</td>
-            <td>{{ "%.2f"|format(it.subtotal) }} USD</td>
+            <td>{{ it['product']['title'] }}</td>
+            <td>{{ it['qty'] }}</td>
+            <td>{{ "%.2f"|format(it['subtotal']) }} USD</td>
             <td>
-              <form method="post" action="{{ url_for('cart_remove', pid=it.product.id) }}">
-                <button class="btn btn-sm btn-danger">Видалити</button>
+              <form method="post" action="{{ url_for('shop.cart_remove', pid=it['product']['id']) }}">
+                <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
               </form>
             </td>
           </tr>
@@ -22,8 +23,11 @@
       </tbody>
     </table>
     <p class="fw-bold">Всього: {{ "%.2f"|format(total) }} USD</p>
+    
     <a class="btn btn-primary" href="{{ url_for('shop.checkout') }}">Оформити замовлення</a>
   {% else %}
     <p>Кошик порожній.</p>
+    <a href="{{ url_for('shop.catalog') }}" class="btn btn-secondary">До каталогу</a>
   {% endif %}
+</div>
 {% endblock %}
