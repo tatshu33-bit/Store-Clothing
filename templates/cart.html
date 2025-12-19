@@ -14,7 +14,7 @@
             <td>{{ it['qty'] }}</td>
             <td>{{ "%.2f"|format(it['subtotal']) }} USD</td>
             <td>
-              <form method="post" action="{{ url_for('shop.cart_remove', pid=it['product']['id']) }}">
+              <form method="post" action="{{ url_for('cart_remove', pid=it['product']['id']) }}">
                 <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
               </form>
             </td>
@@ -24,10 +24,10 @@
     </table>
     <p class="fw-bold">Всього: {{ "%.2f"|format(total) }} USD</p>
     
-    <a class="btn btn-primary" href="{{ url_for('shop.checkout') }}">Оформити замовлення</a>
+    <a class="btn btn-primary" href="{{ url_for('checkout') }}">Оформити замовлення</a>
   {% else %}
     <p>Кошик порожній.</p>
-    <a href="{{ url_for('shop.catalog') }}" class="btn btn-secondary">До каталогу</a>
+    <a href="{{ url_for('catalog') }}" class="btn btn-secondary">До каталогу</a>
   {% endif %}
 </div>
 {% endblock %}
