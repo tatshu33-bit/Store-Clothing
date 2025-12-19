@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Магазин</h2>
-  <div class="row">
-    {% for p in products %}
-      <div class="col-md-4 mb-3">
-        <div class="card h-100">
-          <img src="{{ p.image_url }}" class="card-img-top" style="height:200px;object-fit:cover">
-          <div class="card-body d-flex flex-column">
-            <h5>{{ p.title }}</h5>
-            <p class="text-muted">{{ p.description }}</p>
-            <p class="fw-bold mt-auto">{{ "%.2f"|format(p.price) }} USD</p>
+  <div class="container">
+    <h2 class="my-4">Магазин</h2>
+    <div class="row">
+      {% for p in products %}
+        <div class="col-md-4 mb-3">
+          <div class="card h-100 shadow-sm">
+            <img src="{{ p['image_url'] }}" class="card-img-top" style="height:200px;object-fit:cover" alt="{{ p['title'] }}">
+            
+            <div class="card-body d-flex flex-column">
+              <h5>{{ p['title'] }}</h5>
+              
+              <p class="text-muted small">{{ p['description'] }}</p>
+              
+              <p class="fw-bold mt-auto">{{ "%.2f"|format(p['price']) }} USD</p>
 
-            <div class="mt-2">
-              <!-- Кнопка Детальніше -->
-              <a href="{{ url_for('product', pid=p.id) }}">Детальніше</a>
+              <div class="mt-2 d-flex justify-content-between align-items-center">
+                <a href="{{ url_for('product', pid=p['id']) }}" class="btn btn-link btn-sm p-0">Детальніше</a>
 
-
-              <!-- Форма Додати в кошик -->
-              <form method="post" action="{{ url_for('cart_add', pid=p.id) }}">
-                <input type="hidden" name="quantity" value="1">
-                <button class="btn btn-sm btn-success">Додати в кошик</button>
-              </form>
+                <form method="post" action="{{ url_for('cart_add', pid=p['id']) }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="btn btn-sm btn-success">Додати в кошик</button>
+                </form>
+              </div>
             </div>
-
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}
-
 
